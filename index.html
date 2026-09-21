@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ain Shams Student Community | مجتمع طلاب عين شمس</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0b1f42;
+    --navy-2:#173a72;
+    --blue:#1a4b96;
+    --blue-soft:#6b8fc9;
+    --sun:#c8890f;
+    --sun-2:#e7ac2e;
+    --paper:#ffffff;
+    --panel:#f7f9fc;
+    --ink:#0b1f42;
+    --ink-soft:#5b6a86;
+    --line:#e3e8f1;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  body{
+    margin:0;
+    font-family:'IBM Plex Sans Arabic',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    overflow:hidden;
+  }
+  body.lang-en{ font-family:'Inter',sans-serif; }
+  .serif{ font-family:'Amiri', serif; }
+  body.lang-en .serif{ font-family:'Playfair Display', serif; }
+
+  #app{ position:relative; height:100%; width:100%; }
+  .deck{ position:relative; height:100%; width:100%; }
+
+  .slide{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    padding: calc(84px + env(safe-area-inset-top,0px)) 7.5vw calc(102px + env(safe-area-inset-bottom,0px));
+    opacity:0; transform:translateY(22px) scale(.985);
+    pointer-events:none;
+    transition:opacity .55s cubic-bezier(.22,.9,.32,1), transform .55s cubic-bezier(.22,.9,.32,1);
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .slide.active{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+  .slide.leaving{ opacity:0; transform:translateY(-16px) scale(.985); }
+
+  @keyframes riseIn{
+    from{ opacity:0; transform:translateY(16px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .slide.active > *{
+    animation:riseIn .6s cubic-bezier(.22,.9,.32,1) both;
+  }
+  .slide.active > *:nth-child(1){ animation-delay:.02s; }
+  .slide.active > *:nth-child(2){ animation-delay:.09s; }
+  .slide.active > *:nth-child(3){ animation-delay:.16s; }
+  .slide.active > *:nth-child(4){ animation-delay:.23s; }
+  .slide.active > *:nth-child(5){ animation-delay:.3s; }
+  @media (prefers-reduced-motion: reduce){
+    .slide, .slide.active > *{ animation:none !important; transition:opacity .2s ease !important; transform:none !important; }
+  }
+
+  .topbar{
+    position:fixed; top:0; inset-inline:0;
+    height:calc(70px + env(safe-area-inset-top,0px));
+    padding-top:env(safe-area-inset-top,0px);
+    display:flex; align-items:center; justify-content:space-between;
+    padding-inline:7.5vw;
+    z-index:40;
+    background:linear-gradient(to bottom, var(--paper) 65%, transparent);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand svg{ width:30px; height:30px; flex:none; }
+  .brand-txt{ font-size:14px; font-weight:700; color:var(--navy); line-height:1.3; }
+  .brand-txt small{ display:block; font-size:11px; font-weight:500; color:var(--ink-soft); margin-top:2px;}
+  body.lang-en .brand-txt{ font-size:13.5px; }
+
+  .lang-switch{
+    display:flex; align-items:center; gap:2px;
+    border:1px solid var(--line); border-radius:999px; padding:3px;
+    background:var(--panel);
+  }
+  .lang-btn{
+    border:none; background:transparent; cursor:pointer;
+    font-size:12.5px; font-weight:700; color:var(--ink-soft);
+    padding:6px 14px; border-radius:999px;
+    font-family:'Inter',sans-serif;
+    transition:background .25s ease, color .25s ease, transform .15s ease;
+  }
+  .lang-btn:active{ transform:scale(.92); }
+  .lang-btn.active{ background:var(--navy); color:#fff; }
+
+  .progress-track{ position:fixed; top:0; inset-inline:0; height:3px; background:var(--line); z-index:41; }
+  .progress-fill{ height:100%; background:linear-gradient(90deg,var(--blue),var(--sun-2)); width:12.5%; transition:width .6s cubic-bezier(.22,.9,.32,1); }
+
+  .idx{
+    font-family:'Amiri',serif;
+    font-size:13px; color:var(--sun); font-weight:700;
+    display:flex; align-items:center; gap:8px; margin-bottom:8px;
+    text-transform:none; letter-spacing:.01em;
+  }
+  body.lang-en .idx{ font-family:'Inter',sans-serif; font-size:11.5px; letter-spacing:.09em; text-transform:uppercase; }
+  .idx .ln{ width:26px; height:1px; background:var(--line); display:inline-block; }
+
+  h1,h2,h3,h4{ margin:0; }
+
+  .headline{
+    font-family:'Amiri',serif;
+    font-size:clamp(26px,4.4vw,48px);
+    line-height:1.32;
+    font-weight:700;
+    color:var(--navy);
+    max-width:18ch;
+  }
+  body.lang-en .headline{ font-family:'Playfair Display',serif; line-height:1.22; max-width:16ch; }
+  .lede{
+    margin-top:16px;
+    font-size:clamp(14.5px,1.7vw,16.5px);
+    color:var(--ink-soft);
+    max-width:58ch;
+    line-height:1.95;
+  }
+
+  /* ===== Slide 0 — Hero ===== */
+  #slide-0{ justify-content:center; }
+  .hero-wrap{ display:flex; align-items:center; gap:44px; flex-wrap:wrap; }
+  .hero-emblem{ flex:none; width:106px; height:106px; }
+  .hero-emblem .rays{ transform-origin:60px 60px; animation:spinRays 48s linear infinite; }
+  .hero-emblem .ring{ transform-origin:60px 60px; animation:pulseRing 3.6s ease-in-out infinite; }
+  @keyframes spinRays{ to{ transform:rotate(360deg); } }
+  @keyframes pulseRing{ 0%,100%{ opacity:.45; r:34; } 50%{ opacity:.15; r:40; } }
+  @media (prefers-reduced-motion: reduce){
+    .hero-emblem .rays{ animation:none; }
+    .hero-emblem .ring{ animation:none; }
+  }
+  .hero-text{ flex:1 1 420px; }
+  .hero-title{
+    font-family:'Amiri',serif;
+    font-size:clamp(30px,5.2vw,54px);
+    font-weight:700; line-height:1.34;
+    color:var(--navy);
+    max-width:17ch;
+  }
+  body.lang-en .hero-title{ font-family:'Playfair Display',serif; line-height:1.2; }
+  .hero-title em{ font-style:normal; color:var(--sun); }
+  .hero-sub{ margin-top:20px; font-size:clamp(15px,1.9vw,18px); color:var(--ink-soft); line-height:1.95; max-width:56ch; }
+  .hero-facts{ margin-top:34px; display:flex; gap:0; border-top:1px solid var(--line); }
+  .hero-facts div{ flex:1; padding:16px 18px 0 0; border-inline-end:1px solid var(--line); }
+  .hero-facts div:last-child{ border-inline-end:none; }
+  .hero-facts strong{ display:block; font-family:'Amiri',serif; font-size:15px; color:var(--navy); font-weight:700; margin-bottom:4px; }
+  body.lang-en .hero-facts strong{ font-family:'Inter',sans-serif; font-size:13.5px; }
+  .hero-facts span{ font-size:12.5px; color:var(--ink-soft); }
+
+  /* ===== Slide 1 — Problem ===== */
+  .plist{ margin-top:36px; max-width:62ch; }
+  .prow{ display:flex; gap:22px; padding:20px 0; border-bottom:1px solid var(--line); align-items:baseline; }
+  .prow:first-child{ padding-top:0; }
+  .prow .pn{ font-family:'Amiri',serif; font-size:22px; font-weight:700; color:var(--sun); flex:none; width:2.2ch; }
+  body.lang-en .prow .pn{ font-family:'Playfair Display',serif; }
+  .prow h4{ font-size:16.5px; font-weight:700; color:var(--navy); margin-bottom:6px; }
+  .prow p{ margin:0; font-size:14px; color:var(--ink-soft); line-height:1.85; }
+
+  /* ===== Slide 2 — Goal ===== */
+  .goal-wrap{ display:flex; gap:56px; margin-top:36px; flex-wrap:wrap; align-items:flex-start; }
+  .goal-quote{
+    flex:1 1 360px;
+    font-family:'Amiri',serif;
+    font-size:clamp(19px,2.6vw,25px);
+    line-height:1.8;
+    color:var(--navy);
+    border-inline-start:3px solid var(--sun);
+    padding-inline-start:24px;
+  }
+  body.lang-en .goal-quote{ font-family:'Playfair Display',serif; line-height:1.6; }
+  .goal-list{ flex:1 1 280px; display:flex; flex-direction:column; gap:16px; }
+  .goal-list .gi{ display:flex; gap:12px; align-items:flex-start; }
+  .goal-list .gi svg{ flex:none; width:18px; height:18px; margin-top:3px; color:var(--sun); }
+  .goal-list p{ margin:0; font-size:14.5px; color:var(--ink-soft); line-height:1.75; }
+  .goal-list b{ color:var(--navy); font-weight:700; }
+
+  /* ===== Slide 3 — Governance ===== */
+  .masthead{ margin-top:32px; border-top:2px solid var(--navy); border-bottom:1px solid var(--line); }
+  .mrow{ display:flex; gap:28px; padding:22px 0; border-bottom:1px solid var(--line); align-items:flex-start; }
+  .mrow:last-child{ border-bottom:none; }
+  .mrow .mrole{ flex:0 0 190px; font-family:'Amiri',serif; font-size:15px; color:var(--sun); font-weight:700; padding-top:2px; }
+  body.lang-en .mrow .mrole{ font-family:'Inter',sans-serif; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; }
+  .mrow .mname{ flex:0 0 210px; font-size:16.5px; font-weight:700; color:var(--navy); }
+  .mrow p{ margin:0; flex:1 1 260px; font-size:13.8px; color:var(--ink-soft); line-height:1.85; }
+  @media (max-width:760px){
+    .mrow{ flex-direction:column; gap:6px; }
+    .mrow .mrole,.mrow .mname{ flex:none; }
+  }
+  .oath{
+    margin-top:28px;
+    font-size:14.5px;
+    color:var(--ink-soft);
+    line-height:1.95;
+    max-width:66ch;
+    padding:18px 20px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-inline-start:3px solid var(--navy);
+    border-radius:2px;
+  }
+  .oath b{ color:var(--navy); }
+
+  /* ===== Slide 4 — Step one ===== */
+  .step-big{ display:flex; gap:44px; margin-top:36px; flex-wrap:wrap; }
+  .step-num-big{
+    font-family:'Amiri',serif;
+    font-size:clamp(58px,8.4vw,108px);
+    font-weight:700;
+    color:var(--panel);
+    -webkit-text-stroke:1.5px var(--line);
+    line-height:1;
+    flex:none;
+  }
+  body.lang-en .step-num-big{ font-family:'Playfair Display',serif; }
+  .step-detail{ flex:1 1 340px; padding-top:8px; }
+  .step-detail h4{ font-size:17px; font-weight:700; color:var(--navy); margin-bottom:10px; }
+  .step-detail p{ margin:0 0 18px; font-size:14.5px; color:var(--ink-soft); line-height:1.9; max-width:56ch; }
+  .step-detail ul{ margin:0; padding-inline-start:20px; font-size:14px; color:var(--ink-soft); line-height:2.1; }
+  .step-detail li b{ color:var(--navy); }
+
+  /* ===== Slide 5 — Sections/tasks ===== */
+  .tbl{ margin-top:32px; border-top:1px solid var(--line); max-width:74ch; }
+  .trow{ display:grid; grid-template-columns:130px 1fr 1fr; gap:20px; padding:16px 0; border-bottom:1px solid var(--line); }
+  .trow.head{ font-size:11.5px; font-weight:700; color:var(--blue-soft); text-transform:uppercase; letter-spacing:.06em; }
+  .trow div{ font-size:13.8px; color:var(--ink-soft); line-height:1.7; }
+  .trow .k{ font-weight:700; color:var(--navy); font-family:'Amiri',serif; font-size:15px; }
+  body.lang-en .trow .k{ font-family:'Playfair Display',serif; }
+  @media (max-width:700px){
+    .trow{ grid-template-columns:1fr; gap:4px; padding:16px 0; }
+    .trow.head{ display:none; }
+    .trow div:first-child{ font-size:15px; }
+  }
+
+  /* ===== Slide 6 — Team ===== */
+  .team-grid{
+    margin-top:38px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    max-width:74ch;
+  }
+  @media (max-width:700px){ .team-grid{ grid-template-columns:1fr; gap:14px; } }
+  .team-card{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:26px 20px;
+    text-align:center;
+    background:var(--panel);
+    transition:transform .3s cubic-bezier(.22,.9,.32,1), box-shadow .3s ease, border-color .3s ease;
+  }
+  .team-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 14px 30px -12px rgba(11,31,66,.25);
+    border-color:var(--sun-2);
+  }
+  .team-avatar{
+    width:56px; height:56px; margin:0 auto 14px;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--navy),var(--blue));
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Amiri',serif; font-size:22px; font-weight:700;
+    box-shadow:0 8px 18px -8px rgba(11,31,66,.5);
+  }
+  body.lang-en .team-avatar{ font-family:'Playfair Display',serif; }
+  .team-name{ font-size:16px; font-weight:700; color:var(--navy); font-family:'Amiri',serif; }
+  body.lang-en .team-name{ font-family:'Playfair Display',serif; }
+  .team-role{ margin-top:5px; font-size:12px; color:var(--ink-soft); }
+
+  /* ===== Slide 7 — Closing ===== */
+  .close-wrap{ display:flex; gap:50px; margin-top:34px; flex-wrap:wrap; }
+  .close-stats{ flex:1 1 260px; display:flex; flex-direction:column; gap:22px; }
+  .cstat{ display:flex; align-items:baseline; gap:14px; border-bottom:1px solid var(--line); padding-bottom:16px; }
+  .cstat .cn{ font-family:'Amiri',serif; font-size:30px; font-weight:700; color:var(--sun); flex:none; width:2.2ch; }
+  body.lang-en .cstat .cn{ font-family:'Playfair Display',serif; }
+  .cstat p{ margin:0; font-size:14px; color:var(--ink-soft); line-height:1.75; }
+  .close-cta{
+    flex:1 1 300px;
+    background:var(--navy);
+    color:#f3f6fc;
+    border-radius:6px;
+    padding:32px 30px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    min-height:220px;
+  }
+  .close-cta h3{ font-family:'Amiri',serif; font-size:23px; font-weight:700; margin:0 0 10px; }
+  body.lang-en .close-cta h3{ font-family:'Playfair Display',serif; }
+  .close-cta p{ margin:0; font-size:13.8px; color:#c3d2ee; line-height:1.85; }
+  .close-cta .go-wrap{ margin-top:20px; }
+  .close-cta .go{
+    display:inline-block;
+    align-self:flex-start;
+    font-size:13.5px; font-weight:700; color:#8a6a2a;
+    background:#e9e2cf;
+    padding:11px 22px; border-radius:999px;
+    opacity:.85;
+    position:relative;
+  }
+  .close-cta .go::before{
+    content:'';
+    display:inline-block;
+    width:7px; height:7px; border-radius:50%;
+    background:#c8890f;
+    margin-inline-end:8px;
+    animation:blink 1.8s ease-in-out infinite;
+    vertical-align:middle;
+  }
+  @keyframes blink{ 0%,100%{ opacity:1; } 50%{ opacity:.25; } }
+  .close-cta .go-note{
+    margin-top:10px;
+    font-size:12px;
+    color:#a9bade;
+    line-height:1.7;
+    max-width:34ch;
+  }
+
+  /* ===== Nav ===== */
+  .navctl{
+    position:fixed; bottom:calc(22px + env(safe-area-inset-bottom,0px));
+    inset-inline:0; display:flex; align-items:center; justify-content:center; gap:16px; z-index:40;
+  }
+  .navbtn{
+    width:44px; height:44px; border-radius:50%;
+    border:1px solid var(--line); background:var(--paper); color:var(--navy);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; font-size:17px; box-shadow:0 2px 10px -4px rgba(11,31,66,.15);
+    transition:transform .15s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .navbtn:hover{ background:var(--panel); box-shadow:0 4px 16px -4px rgba(11,31,66,.22); }
+  .navbtn:active{ transform:scale(.88); }
+  .dots{ display:flex; gap:7px; align-items:center; padding:0 4px; }
+  .dot-btn{ position:relative; width:6px; height:6px; border-radius:50%; background:var(--line); cursor:pointer; border:none; padding:0; transition:all .3s cubic-bezier(.22,.9,.32,1); }
+  .dot-btn::after{ content:''; position:absolute; inset:-10px; }
+  .dot-btn:active{ transform:scale(1.3); }
+  .dot-btn.active{ width:20px; border-radius:4px; background:var(--blue); }
+  .slide-counter{
+    position:fixed; bottom:calc(26px + env(safe-area-inset-bottom,0px)); inset-inline-start:7.5vw;
+    font-family:'Amiri',serif; font-size:13px; color:var(--ink-soft); z-index:40; font-weight:700;
+  }
+  body.lang-en .slide-counter{ font-family:'Inter',sans-serif; }
+  .slide-counter b{ color:var(--navy); }
+
+  @media (max-width:640px){
+    .slide{ padding-top:calc(76px + env(safe-area-inset-top,0px)); padding-bottom:114px; }
+    .slide-counter{ display:none; }
+    .hero-facts{ flex-direction:column; }
+    .hero-facts div{ border-inline-end:none; border-bottom:1px solid var(--line); padding:12px 0; }
+    .brand-txt small{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+<div class="topbar">
+  <div class="brand">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="20" cy="20" r="7.2" fill="var(--sun-2)" stroke="var(--navy)" stroke-width="1.6"/>
+      <g stroke="var(--navy)" stroke-width="1.6" stroke-linecap="round">
+        <line x1="20" y1="2" x2="20" y2="7.5"/>
+        <line x1="20" y1="32.5" x2="20" y2="38"/>
+        <line x1="2" y1="20" x2="7.5" y2="20"/>
+        <line x1="32.5" y1="20" x2="38" y2="20"/>
+        <line x1="7.6" y1="7.6" x2="11.4" y2="11.4"/>
+        <line x1="28.6" y1="28.6" x2="32.4" y2="32.4"/>
+        <line x1="32.4" y1="7.6" x2="28.6" y2="11.4"/>
+        <line x1="11.4" y1="28.6" x2="7.6" y2="32.4"/>
+      </g>
+    </svg>
+    <div class="brand-txt">
+      <span data-ar="مجتمع طلاب عين شمس" data-en="Ain Shams Student Community">مجتمع طلاب عين شمس</span>
+      <small data-ar="مبادرة طلابية تحت الإشراف الرسمي" data-en="A student initiative under official supervision">مبادرة طلابية تحت الإشراف الرسمي</small>
+    </div>
+  </div>
+  <div class="lang-switch">
+    <button class="lang-btn active" id="btnAr" onclick="setLang('ar')">AR</button>
+    <button class="lang-btn" id="btnEn" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<div id="app">
+<div class="deck" id="deck">
+
+  <!-- Slide 0 — Hero -->
+  <section class="slide active" id="slide-0">
+    <div class="hero-wrap">
+      <svg class="hero-emblem" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle class="ring" cx="60" cy="60" r="34" stroke="var(--sun)" stroke-width="1.4" opacity=".45" fill="none"/>
+        <g class="rays" stroke="var(--navy)" stroke-width="3" stroke-linecap="round">
+          <line x1="60" y1="4" x2="60" y2="20"/>
+          <line x1="60" y1="100" x2="60" y2="116"/>
+          <line x1="4" y1="60" x2="20" y2="60"/>
+          <line x1="100" y1="60" x2="116" y2="60"/>
+          <line x1="20.7" y1="20.7" x2="32" y2="32"/>
+          <line x1="88" y1="88" x2="99.3" y2="99.3"/>
+          <line x1="99.3" y1="20.7" x2="88" y2="32"/>
+          <line x1="32" y1="88" x2="20.7" y2="99.3"/>
+        </g>
+        <circle cx="60" cy="60" r="21" fill="var(--sun-2)" stroke="var(--navy)" stroke-width="3"/>
+        <circle cx="60" cy="60" r="8" fill="var(--navy)"/>
+      </svg>
+      <div class="hero-text">
+        <div class="hero-title" data-ar="مرجع الطلبة الرسمي الوحيد، بإشراف الجامعة" data-en="The one official student reference, under university supervision">مرجع الطلبة <em>الرسمي</em> الوحيد، بإشراف الجامعة</div>
+        <p class="hero-sub" data-ar="مبادرة لتأسيس Community طلابية واحدة معتمدة من جامعة عين شمس، تكون القناة الموثوقة بين الطلبة والإدارة — بدل عشرات المجموعات المشتتة وغير الخاضعة لإشراف." data-en="An initiative to establish one student community, officially approved by Ain Shams University, serving as the trusted channel between students and the administration — replacing dozens of scattered, unsupervised groups.">مبادرة لتأسيس Community طلابية واحدة معتمدة من جامعة عين شمس، تكون القناة الموثوقة بين الطلبة والإدارة — بدل عشرات المجموعات المشتتة وغير الخاضعة لإشراف.</p>
+      </div>
+    </div>
+    <div class="hero-facts">
+      <div><strong data-ar="الهدف" data-en="Goal">الهدف</strong><span data-ar="Community واحدة معتمدة رسميًا" data-en="One officially approved community">Community واحدة معتمدة رسميًا</span></div>
+      <div><strong data-ar="الإشراف" data-en="Oversight">الإشراف</strong><span data-ar="الجامعة، الأمن، شؤون الطلبة" data-en="University, security, student affairs">الجامعة، الأمن، شؤون الطلبة</span></div>
+      <div><strong data-ar="أول خطوتين" data-en="First two steps">أول خطوتين</strong><span data-ar="حصر الطلبة، ثم تقسيم Sections" data-en="Register students, then form Sections">حصر الطلبة، ثم تقسيم Sections</span></div>
+    </div>
+  </section>
+
+  <!-- Slide 1 — Problem -->
+  <section class="slide" id="slide-1">
+    <div class="idx"><span class="ln"></span><span data-ar="الوضع الحالي" data-en="Current situation">الوضع الحالي</span></div>
+    <h2 class="headline" data-ar="التمثيل الطلابي دلوقتي مشتت، ومن غير رقابة" data-en="Student representation today is scattered and unsupervised">التمثيل الطلابي دلوقتي مشتت، ومن غير رقابة</h2>
+    <p class="lede" data-ar="في عدد كبير من الجروبات والـ hubs والـ clubs بتتكلم باسم الطلبة من غير أي جهة رسمية تراجعها، وده بيحمّل القائمين عليها مخاطرة مش لازم يتحملوها." data-en="Many groups, hubs, and clubs speak on students' behalf without any official body reviewing them — putting unnecessary risk on the people running them.">في عدد كبير من الجروبات والـ hubs والـ clubs بتتكلم باسم الطلبة من غير أي جهة رسمية تراجعها، وده بيحمّل القائمين عليها مخاطرة مش لازم يتحملوها.</p>
+    <div class="plist">
+      <div class="prow">
+        <div class="pn">١</div>
+        <div>
+          <h4 data-ar="مفيش جهة واحدة معتمدة" data-en="No single approved body">مفيش جهة واحدة معتمدة</h4>
+          <p data-ar="الطالب مش عارف مين ممثله الرسمي، فبيتنقل بين مصادر كتير متضاربة." data-en="Students don't know who officially represents them, so they bounce between conflicting sources.">الطالب مش عارف مين ممثله الرسمي، فبيتنقل بين مصادر كتير متضاربة.</p>
+        </div>
+      </div>
+      <div class="prow">
+        <div class="pn">٢</div>
+        <div>
+          <h4 data-ar="مخاطرة على القائمين على المجموعات" data-en="Risk falls on group organizers">مخاطرة على القائمين على المجموعات</h4>
+          <p data-ar="أي تصرف فردي غلط داخل مجموعة غير منظمة بيترتب عليه مسؤولية على مديرها." data-en="Any individual misconduct inside an unregulated group can create liability for whoever runs it.">أي تصرف فردي غلط داخل مجموعة غير منظمة بيترتب عليه مسؤولية على مديرها.</p>
+        </div>
+      </div>
+      <div class="prow">
+        <div class="pn">٣</div>
+        <div>
+          <h4 data-ar="مفيش قناة رسمية للتواصل" data-en="No official communication channel">مفيش قناة رسمية للتواصل</h4>
+          <p data-ar="الرسائل بين الطلبة والإدارة بتضيع في الزحمة، ومفيش حد مسؤول عن إيصالها." data-en="Messages between students and the administration get lost, with no one accountable for delivering them.">الرسائل بين الطلبة والإدارة بتضيع في الزحمة، ومفيش حد مسؤول عن إيصالها.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 2 — Goal -->
+  <section class="slide" id="slide-2">
+    <div class="idx"><span class="ln"></span><span data-ar="الهدف" data-en="The Goal">الهدف</span></div>
+    <h2 class="headline" data-ar="نبني الـ Community المعتمدة الوحيدة من الجامعة" data-en="Building the one community officially approved by the university">نبني الـ Community المعتمدة الوحيدة من الجامعة</h2>
+    <div class="goal-wrap">
+      <p class="goal-quote" data-ar="مش بديل عن إدارة الجامعة — إحنا القناة المنظمة اللي بتوصل صوت الطلبة للإدارة، وتوصل قرارات الإدارة للطلبة." data-en="Not a replacement for the university administration — we are the organized channel that carries students' voice to the administration, and its decisions back to students.">مش بديل عن إدارة الجامعة — إحنا القناة المنظمة اللي بتوصل صوت الطلبة للإدارة، وتوصل قرارات الإدارة للطلبة.</p>
+      <div class="goal-list">
+        <div class="gi"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="4"/></svg><p><b data-ar="مرجع واحد فقط" data-en="A single reference">مرجع واحد فقط</b> — <span data-ar="تنتهي حالة تعدد المصادر وتضارب المعلومات." data-en="ending the confusion of multiple, conflicting sources.">تنتهي حالة تعدد المصادر وتضارب المعلومات.</span></p></div>
+        <div class="gi"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="4"/></svg><p><b data-ar="شفافية كاملة" data-en="Full transparency">شفافية كاملة</b> — <span data-ar="كل نشاط موثق ومعروض للجهات المشرفة." data-en="every activity is documented and visible to the supervising bodies.">كل نشاط موثق ومعروض للجهات المشرفة.</span></p></div>
+        <div class="gi"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="4"/></svg><p><b data-ar="تمثيل منظم" data-en="Organized representation">تمثيل منظم</b> — <span data-ar="كل Section له ممثل واضح ومهام محددة." data-en="each Section has a clear representative with defined tasks.">كل Section له ممثل واضح ومهام محددة.</span></p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 3 — Governance -->
+  <section class="slide" id="slide-3">
+    <div class="idx"><span class="ln"></span><span data-ar="الحوكمة والإشراف" data-en="Governance & Oversight">الحوكمة والإشراف</span></div>
+    <h2 class="headline" data-ar="كل خطوة تتم بعلم الجهات الرسمية الثلاث" data-en="Every step happens with the knowledge of three official bodies">كل خطوة تتم بعلم الجهات الرسمية الثلاث</h2>
+    <div class="masthead">
+      <div class="mrow">
+        <div class="mrole" data-ar="المشرف الأكاديمي" data-en="Academic Supervisor">المشرف الأكاديمي</div>
+        <div class="mname" data-ar="د. نبيل" data-en="Dr. Nabil">د. نبيل</div>
+        <p data-ar="إشراف مباشر ومستمر على فكرة الـ community وكل نشاط بيحصل جواها من أول يوم." data-en="Direct, ongoing supervision of the community concept and every activity within it from day one.">إشراف مباشر ومستمر على فكرة الـ community وكل نشاط بيحصل جواها من أول يوم.</p>
+      </div>
+      <div class="mrow">
+        <div class="mrole" data-ar="الجهة الأمنية" data-en="Security Authority">الجهة الأمنية</div>
+        <div class="mname" data-ar="رئيس أمن الجامعة" data-en="Head of University Security">رئيس أمن الجامعة</div>
+        <p data-ar="على اطّلاع كامل بالتفاصيل التنظيمية، ضمانًا لانضباط الأنشطة وسلامة الطلبة." data-en="Fully informed of the organizational details, ensuring activities stay disciplined and students stay safe.">على اطّلاع كامل بالتفاصيل التنظيمية، ضمانًا لانضباط الأنشطة وسلامة الطلبة.</p>
+      </div>
+      <div class="mrow">
+        <div class="mrole" data-ar="شؤون الطلبة" data-en="Student Affairs">شؤون الطلبة</div>
+        <div class="mname" data-ar="رئيس شؤون الطلبة" data-en="Head of Student Affairs">رئيس شؤون الطلبة</div>
+        <p data-ar="حلقة الوصل الرسمية بين الـ community وإدارة الجامعة في أي قرار." data-en="The official link between the community and the university administration on any decision.">حلقة الوصل الرسمية بين الـ community وإدارة الجامعة في أي قرار.</p>
+      </div>
+    </div>
+    <p class="oath"><b data-ar="بموافقة الجهات الثلاث" data-en="With the approval of all three bodies">بموافقة الجهات الثلاث</b> <span data-ar="على كل تفصيلة، دورنا كمشرفين يبقى تنظيمي بحت — وأي تصرف فردي خارج عن الأنشطة المعتمدة، مسؤوليته على صاحبه وحده." data-en="on every detail, our role as organizers stays purely administrative — and any individual conduct outside approved activities remains the sole responsibility of that individual.">على كل تفصيلة، دورنا كمشرفين يبقى تنظيمي بحت — وأي تصرف فردي خارج عن الأنشطة المعتمدة، مسؤوليته على صاحبه وحده.</span></p>
+  </section>
+
+  <!-- Slide 4 — Step one -->
+  <section class="slide" id="slide-4">
+    <div class="idx"><span class="ln"></span><span data-ar="البداية العملية — الخطوة الأولى" data-en="Getting started — Step one">البداية العملية — الخطوة الأولى</span></div>
+    <h2 class="headline" data-ar="حصر رسمي وموثّق لكل الطلبة" data-en="An official, documented register of all students">حصر رسمي وموثّق لكل الطلبة</h2>
+    <div class="step-big">
+      <div class="step-num-big">١</div>
+      <div class="step-detail">
+        <h4 data-ar="كشف الأسماء وبيانات التواصل" data-en="Names and contact records">كشف الأسماء وبيانات التواصل</h4>
+        <p data-ar="قاعدة بيانات واحدة منظمة نبني عليها باقي خطوات المبادرة، بإشراف الجهات الرسمية المذكورة." data-en="One organized database that the rest of the initiative is built on, under the supervision of the official bodies mentioned above.">قاعدة بيانات واحدة منظمة نبني عليها باقي خطوات المبادرة، بإشراف الجهات الرسمية المذكورة.</p>
+        <ul>
+          <li><b data-ar="كشف رسمي" data-en="An official list">كشف رسمي</b> <span data-ar="بأسماء كل الطلبة المشاركين في المبادرة." data-en="of the names of all students taking part in the initiative.">بأسماء كل الطلبة المشاركين في المبادرة.</span></li>
+          <li><b data-ar="أرقام تواصل" data-en="Contact numbers">أرقام تواصل</b> <span data-ar="تُجمع بشكل منظم لتسهيل المراسلات الرسمية، وتُحفظ بشكل مقصور على أغراض المبادرة فقط." data-en="collected in an organized way to support official communication, and kept for the initiative's purposes only.">تُجمع بشكل منظم لتسهيل المراسلات الرسمية، وتُحفظ بشكل مقصور على أغراض المبادرة فقط.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 5 — Sections & tasks -->
+  <section class="slide" id="slide-5">
+    <div class="idx"><span class="ln"></span><span data-ar="الخطوة الثانية" data-en="Step two">الخطوة الثانية</span></div>
+    <h2 class="headline" data-ar="تقسيم Sections وتمثيل واضح لكل مجموعة" data-en="Forming Sections with clear representation for each group">تقسيم Sections وتمثيل واضح لكل مجموعة</h2>
+    <p class="lede" data-ar="بعد الحصر، الطلبة بيتقسموا على Sections، وكل Section بيختار ممثل أو ممثلة، وكل ممثل بياخد Tasks محددة يبقى مسؤول عنها أمام المشرفين." data-en="After registration, students are grouped into Sections. Each Section elects a representative, who takes on defined Tasks and reports back to the supervisors.">بعد الحصر، الطلبة بيتقسموا على Sections، وكل Section بيختار ممثل أو ممثلة، وكل ممثل بياخد Tasks محددة يبقى مسؤول عنها أمام المشرفين.</p>
+    <div class="tbl">
+      <div class="trow head"><div data-ar="العنصر" data-en="Element">العنصر</div><div data-ar="الوصف" data-en="Description">الوصف</div><div data-ar="المسؤولية" data-en="Accountability">المسؤولية</div></div>
+      <div class="trow"><div class="k">Section</div><div data-ar="تقسيم الطلبة حسب الفرقة أو التخصص، بهوية واضحة داخل الـ community." data-en="Students grouped by year or major, each with a clear identity within the community.">تقسيم الطلبة حسب الفرقة أو التخصص، بهوية واضحة داخل الـ community.</div><div data-ar="يحدده فريق التنسيق" data-en="Set by the coordination team">يحدده فريق التنسيق</div></div>
+      <div class="trow"><div class="k" data-ar="الممثل" data-en="Representative">الممثل</div><div data-ar="طالب أو طالبة يُنتخب لتمثيل الـ Section رسميًا." data-en="A student elected to officially represent their Section.">طالب أو طالبة يُنتخب لتمثيل الـ Section رسميًا.</div><div data-ar="حلقة وصل مع الإدارة" data-en="Liaison with the administration">حلقة وصل مع الإدارة</div></div>
+      <div class="trow"><div class="k">Tasks</div><div data-ar="مهام واضحة ومحددة لكل ممثل حسب دوره داخل قسمه." data-en="Clear, defined tasks for each representative based on their role.">مهام واضحة ومحددة لكل ممثل حسب دوره داخل قسمه.</div><div data-ar="متابعة دورية مع المشرفين" data-en="Reviewed periodically with supervisors">متابعة دورية مع المشرفين</div></div>
+    </div>
+  </section>
+
+  <!-- Slide 6 — Responsible students -->
+  <section class="slide" id="slide-6">
+    <div class="idx"><span class="ln"></span><span data-ar="فريق التنسيق" data-en="Coordination Team">فريق التنسيق</span></div>
+    <h2 class="headline" data-ar="الطلبة المسؤولين عن المبادرة" data-en="Students responsible for the initiative">الطلبة المسؤولين عن المبادرة</h2>
+    <p class="lede" data-ar="نقطة التواصل المباشرة بين الطلبة والمشرفين، ومسؤولين عن متابعة الـ Sections وتنفيذ الخطوات." data-en="The direct point of contact between students and supervisors, responsible for following up with the Sections and carrying out the steps.">نقطة التواصل المباشرة بين الطلبة والمشرفين، ومسؤولين عن متابعة الـ Sections وتنفيذ الخطوات.</p>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">ع</div>
+        <div class="team-name">عمر محمد</div>
+        <div class="team-role" data-ar="طالب مسؤول" data-en="Responsible Student">طالب مسؤول</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">ج</div>
+        <div class="team-name">جاسر</div>
+        <div class="team-role" data-ar="طالب مسؤول" data-en="Responsible Student">طالب مسؤول</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">ع</div>
+        <div class="team-name">عبدالرحمن هشام</div>
+        <div class="team-role" data-ar="طالب مسؤول" data-en="Responsible Student">طالب مسؤول</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 7 — Closing -->
+  <section class="slide" id="slide-7">
+    <div class="idx"><span class="ln"></span><span data-ar="الخلاصة" data-en="In Summary">الخلاصة</span></div>
+    <h2 class="headline" data-ar="ثقة حقيقية، من الجامعة وللطلبة" data-en="Real trust — from the university, for the students">ثقة حقيقية، من الجامعة وللطلبة</h2>
+    <div class="close-wrap">
+      <div class="close-stats">
+        <div class="cstat"><div class="cn">١</div><p data-ar="مرجع رسمي واحد بدل عشرات المجموعات المشتتة." data-en="One official reference instead of dozens of scattered groups.">مرجع رسمي واحد بدل عشرات المجموعات المشتتة.</p></div>
+        <div class="cstat"><div class="cn">٣</div><p data-ar="جهات إشراف رسمية على علم كامل بكل نشاط." data-en="Three official bodies fully informed of every activity.">جهات إشراف رسمية على علم كامل بكل نشاط.</p></div>
+        <div class="cstat"><div class="cn">∞</div><p data-ar="مسؤولية واضحة لكل فرد حسب دوره، من غير التباس." data-en="Clear accountability for everyone, by role, with no ambiguity.">مسؤولية واضحة لكل فرد حسب دوره، من غير التباس.</p></div>
+      </div>
+      <div class="close-cta">
+        <div>
+          <h3 data-ar="جاهزين نبدأ الخطوة الأولى" data-en="Ready for step one">جاهزين نبدأ الخطوة الأولى</h3>
+          <p data-ar="حصر الطلبة، تقسيم الـ Sections، واختيار الممثلين — بإشراف الجهات الثلاث من أول يوم." data-en="Register students, form the Sections, elect representatives — under the three bodies' supervision from day one.">حصر الطلبة، تقسيم الـ Sections، واختيار الممثلين — بإشراف الجهات الثلاث من أول يوم.</p>
+        </div>
+        <div class="go-wrap">
+          <div class="go" data-ar="لسه مش شغالة" data-en="Not active yet">لنبدأ →</div>
+          <p class="go-note" data-ar="التسجيل هيبدأ لما ال Student ID يتسلم." data-en="Registration will start once the Student ID is submitted.">التسجيل هيبدأ لما ال Student ID يتسلم.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+
+<div class="navctl">
+  <button class="navbtn" id="prevBtn" aria-label="Previous">‹</button>
+  <div class="dots" id="dots"></div>
+  <button class="navbtn" id="nextBtn" aria-label="Next">›</button>
+</div>
+<div class="slide-counter"><b id="curNum">١</b> / <span id="totNum">٧</span></div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var total = slides.length;
+  var idx = 0;
+  var lang = 'ar';
+  var arNum = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+  function fmtNum(n){ return lang==='ar' ? String(n).split('').map(function(d){return arNum[+d];}).join('') : String(n); }
+
+  var dotsWrap = document.getElementById('dots');
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var fill = document.getElementById('progressFill');
+  var curNum = document.getElementById('curNum');
+  var totNum = document.getElementById('totNum');
+
+  slides.forEach(function(_, i){
+    var b = document.createElement('button');
+    b.className = 'dot-btn' + (i===0 ? ' active' : '');
+    b.addEventListener('click', function(){ go(i); });
+    dotsWrap.appendChild(b);
+  });
+  var dotEls = Array.prototype.slice.call(dotsWrap.children);
+
+  function go(n){
+    if(n < 0 || n >= total) return;
+    slides[idx].classList.remove('active');
+    dotEls[idx].classList.remove('active');
+    idx = n;
+    slides[idx].classList.add('active');
+    dotEls[idx].classList.add('active');
+    fill.style.width = ((idx+1)/total*100) + '%';
+    curNum.textContent = fmtNum(idx+1);
+  }
+
+  prevBtn.addEventListener('click', function(){ go(idx-1 < 0 ? idx : idx-1); });
+  nextBtn.addEventListener('click', function(){ go(idx+1 >= total ? idx : idx+1); });
+
+  document.addEventListener('keydown', function(e){
+    var fwd = lang === 'ar' ? 'ArrowLeft' : 'ArrowRight';
+    var back = lang === 'ar' ? 'ArrowRight' : 'ArrowLeft';
+    if(e.key === fwd) go(idx+1 <= total-1 ? idx+1 : idx);
+    if(e.key === back) go(idx-1 >= 0 ? idx-1 : idx);
+  });
+
+  var touchX = null;
+  document.addEventListener('touchstart', function(e){ touchX = e.touches[0].clientX; }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if(touchX === null) return;
+    var dx = e.changedTouches[0].clientX - touchX;
+    if(Math.abs(dx) > 50){
+      var swipedForward = lang === 'ar' ? dx < 0 : dx > 0;
+      if(swipedForward) go(idx+1 <= total-1 ? idx+1 : idx);
+      else go(idx-1 >= 0 ? idx-1 : idx);
+    }
+    touchX = null;
+  }, {passive:true});
+
+  window.setLang = function(l){
+    lang = l;
+    document.documentElement.lang = l;
+    document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
+    document.body.classList.toggle('lang-en', l === 'en');
+    document.getElementById('btnAr').classList.toggle('active', l==='ar');
+    document.getElementById('btnEn').classList.toggle('active', l==='en');
+    document.querySelectorAll('[data-ar]').forEach(function(el){
+      var v = l === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+      if(v !== null) el.textContent = v;
+    });
+    totNum.textContent = fmtNum(total);
+    curNum.textContent = fmtNum(idx+1);
+  };
+
+  go(0);
+})();
+</script>
+
+</body>
+</html>
