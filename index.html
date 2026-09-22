@@ -127,7 +127,7 @@
   .lang-btn.active{ background:var(--navy); color:#fff; }
 
   .progress-track{ position:fixed; top:0; inset-inline:0; height:3px; background:var(--line); z-index:41; }
-  .progress-fill{ height:100%; background:linear-gradient(90deg,var(--blue),var(--sun-2)); width:11%; transition:width .6s cubic-bezier(.22,.9,.32,1); }
+  .progress-fill{ height:100%; background:linear-gradient(90deg,var(--blue),var(--sun-2)); width:11.1%; transition:width .6s cubic-bezier(.22,.9,.32,1); }
 
   .idx{
     font-family:'Amiri',serif;
@@ -317,6 +317,37 @@
   .team-name{ font-size:16px; font-weight:700; color:var(--navy); font-family:'Amiri',serif; }
   body.lang-en .team-name{ font-family:'Playfair Display',serif; }
   .team-role{ margin-top:5px; font-size:12px; color:var(--ink-soft); }
+
+  /* ===== Channels slide ===== */
+  .chan-grid{
+    margin-top:36px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+    max-width:80ch;
+  }
+  @media (max-width:760px){ .chan-grid{ grid-template-columns:1fr; } }
+  .chan-card{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px 22px;
+    background:var(--panel);
+    display:flex; gap:16px; align-items:flex-start;
+    transition:transform .3s cubic-bezier(.22,.9,.32,1), box-shadow .3s ease, border-color .3s ease;
+  }
+  .chan-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 14px 30px -14px rgba(11,31,66,.28);
+    border-color:var(--sun-2);
+  }
+  .chan-emoji{
+    flex:none; font-size:24px; line-height:1;
+    width:44px; height:44px; border-radius:11px;
+    background:var(--paper); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chan-txt h4{ font-size:15.5px; font-weight:700; color:var(--navy); margin:0 0 5px; }
+  .chan-txt p{ margin:0; font-size:13px; color:var(--ink-soft); line-height:1.75; }
 
   /* ===== Slide 7 — Closing ===== */
   .close-wrap{ display:flex; gap:50px; margin-top:34px; flex-wrap:wrap; }
@@ -572,6 +603,57 @@
       <div class="trow"><div class="k">Section</div><div data-ar="تقسيم الطلبة حسب الفرقة أو التخصص، بهوية واضحة داخل الـ community." data-en="Students grouped by year or major, each with a clear identity within the community.">تقسيم الطلبة حسب الفرقة أو التخصص، بهوية واضحة داخل الـ community.</div><div data-ar="يحدده فريق التنسيق" data-en="Set by the coordination team">يحدده فريق التنسيق</div></div>
       <div class="trow"><div class="k" data-ar="الممثل" data-en="Representative">الممثل</div><div data-ar="طالب أو طالبة يُنتخب لتمثيل الـ Section رسميًا." data-en="A student elected to officially represent their Section.">طالب أو طالبة يُنتخب لتمثيل الـ Section رسميًا.</div><div data-ar="حلقة وصل مع الإدارة" data-en="Liaison with the administration">حلقة وصل مع الإدارة</div></div>
       <div class="trow"><div class="k">Tasks</div><div data-ar="مهام واضحة ومحددة لكل ممثل حسب دوره داخل قسمه." data-en="Clear, defined tasks for each representative based on their role.">مهام واضحة ومحددة لكل ممثل حسب دوره داخل قسمه.</div><div data-ar="متابعة دورية مع المشرفين" data-en="Reviewed periodically with supervisors">متابعة دورية مع المشرفين</div></div>
+    </div>
+  </section>
+
+  <!-- Slide 6a — Community channels -->
+  <section class="slide" id="slide-6a">
+    <div class="idx"><span class="ln"></span><span data-ar="داخل المجتمع" data-en="Inside the community">داخل المجتمع</span></div>
+    <h2 class="headline" data-ar="قنوات المجتمع" data-en="Community Channels">قنوات المجتمع</h2>
+    <p class="lede" data-ar="كل قناة ليها غرض واضح، عشان كل حاجة تلاقيها في مكانها بسهولة." data-en="Each channel has a clear purpose, so everything is easy to find in its place.">كل قناة ليها غرض واضح، عشان كل حاجة تلاقيها في مكانها بسهولة.</p>
+    <div class="chan-grid">
+      <div class="chan-card">
+        <div class="chan-emoji">📢</div>
+        <div class="chan-txt">
+          <h4 data-ar="الإعلانات" data-en="Announcements">الإعلانات</h4>
+          <p data-ar="إعلانات رسمية، تحديثات مهمة وتنبيهات عاجلة." data-en="Official announcements, important updates & urgent notices.">إعلانات رسمية، تحديثات مهمة وتنبيهات عاجلة.</p>
+        </div>
+      </div>
+      <div class="chan-card">
+        <div class="chan-emoji">💡</div>
+        <div class="chan-txt">
+          <h4 data-ar="اسأل واستفسر" data-en="Ask & Help">اسأل واستفسر</h4>
+          <p data-ar="اسأل أي سؤال، واستفيد بإجابات زمايلك." data-en="Ask questions, get answers & help each other.">اسأل أي سؤال، واستفيد بإجابات زمايلك.</p>
+        </div>
+      </div>
+      <div class="chan-card">
+        <div class="chan-emoji">💬</div>
+        <div class="chan-txt">
+          <h4 data-ar="نقاش عام" data-en="Discussion">نقاش عام</h4>
+          <p data-ar="نقاشات عامة، كلام حر، ودردشة بين الطلبة." data-en="General discussions, conversations & student chat.">نقاشات عامة، كلام حر، ودردشة بين الطلبة.</p>
+        </div>
+      </div>
+      <div class="chan-card">
+        <div class="chan-emoji">📚</div>
+        <div class="chan-txt">
+          <h4 data-ar="مذاكرة ومصادر" data-en="Study & Resources">مذاكرة ومصادر</h4>
+          <p data-ar="محاضرات، ملفات PDF، بوردات، ملازم ومصادر مذاكرة مفيدة." data-en="Lectures, PDFs, boards, notes & useful study materials.">محاضرات، ملفات PDF، بوردات، ملازم ومصادر مذاكرة مفيدة.</p>
+        </div>
+      </div>
+      <div class="chan-card">
+        <div class="chan-emoji">🎉</div>
+        <div class="chan-txt">
+          <h4 data-ar="فعاليات وأنشطة" data-en="Events & Activities">فعاليات وأنشطة</h4>
+          <p data-ar="فعاليات، أنشطة، مسابقات وفرص للطلبة." data-en="Events, activities, competitions & student opportunities.">فعاليات، أنشطة، مسابقات وفرص للطلبة.</p>
+        </div>
+      </div>
+      <div class="chan-card">
+        <div class="chan-emoji">🎓</div>
+        <div class="chan-txt">
+          <h4 data-ar="معلومات جامعية" data-en="University Info">معلومات جامعية</h4>
+          <p data-ar="جداول، معلومات أكاديمية، مواعيد نهائية وتحديثات الجامعة." data-en="Schedules, academic information, deadlines & university updates.">جداول، معلومات أكاديمية، مواعيد نهائية وتحديثات الجامعة.</p>
+        </div>
+      </div>
     </div>
   </section>
 
