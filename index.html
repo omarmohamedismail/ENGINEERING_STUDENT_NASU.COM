@@ -20,8 +20,23 @@
     --ink:#0b1f42;
     --ink-soft:#5b6a86;
     --line:#e3e8f1;
+    --navy-fixed:#0b1f42;
+    --blue-fixed:#1a4b96;
     padding-top:env(safe-area-inset-top,0px);
     padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  html[data-theme="dark"]{
+    --navy:#e7edfb;
+    --navy-2:#b9cdf2;
+    --blue:#8fb3ec;
+    --blue-soft:#7396d6;
+    --sun:#e7ac2e;
+    --sun-2:#f0b93d;
+    --paper:#0a1526;
+    --panel:#111f3a;
+    --ink:#e7edfb;
+    --ink-soft:#a7b7d6;
+    --line:#223357;
   }
   *{box-sizing:border-box;}
   html,body{height:100%;}
@@ -32,6 +47,7 @@
     background:var(--paper);
     color:var(--ink);
     overflow:hidden;
+    transition:background .35s ease, color .35s ease;
   }
   body.lang-en{ font-family:'Inter',sans-serif; }
   .serif{ font-family:'Amiri', serif; }
@@ -85,6 +101,16 @@
   .brand-txt small{ display:block; font-size:11px; font-weight:500; color:var(--ink-soft); margin-top:2px;}
   body.lang-en .brand-txt{ font-size:13.5px; }
 
+  .topbar-controls{ display:flex; align-items:center; gap:10px; }
+  .theme-btn{
+    width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--line); background:var(--panel); color:var(--navy);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; flex:none;
+    transition:transform .2s ease, background .25s ease;
+  }
+  .theme-btn svg{ width:16px; height:16px; }
+  .theme-btn:active{ transform:scale(.88) rotate(15deg); }
   .lang-switch{
     display:flex; align-items:center; gap:2px;
     border:1px solid var(--line); border-radius:999px; padding:3px;
@@ -101,7 +127,7 @@
   .lang-btn.active{ background:var(--navy); color:#fff; }
 
   .progress-track{ position:fixed; top:0; inset-inline:0; height:3px; background:var(--line); z-index:41; }
-  .progress-fill{ height:100%; background:linear-gradient(90deg,var(--blue),var(--sun-2)); width:12.5%; transition:width .6s cubic-bezier(.22,.9,.32,1); }
+  .progress-fill{ height:100%; background:linear-gradient(90deg,var(--blue),var(--sun-2)); width:11%; transition:width .6s cubic-bezier(.22,.9,.32,1); }
 
   .idx{
     font-family:'Amiri',serif;
@@ -270,7 +296,7 @@
   .team-avatar{
     width:56px; height:56px; margin:0 auto 14px;
     border-radius:50%;
-    background:linear-gradient(135deg,var(--navy),var(--blue));
+    background:linear-gradient(135deg,var(--navy-fixed),var(--blue-fixed));
     color:#fff;
     display:flex; align-items:center; justify-content:center;
     font-family:'Amiri',serif; font-size:22px; font-weight:700;
@@ -290,7 +316,7 @@
   .cstat p{ margin:0; font-size:14px; color:var(--ink-soft); line-height:1.75; }
   .close-cta{
     flex:1 1 300px;
-    background:var(--navy);
+    background:var(--navy-fixed);
     color:#f3f6fc;
     border-radius:6px;
     padding:32px 30px;
@@ -300,6 +326,13 @@
   .close-cta h3{ font-family:'Amiri',serif; font-size:23px; font-weight:700; margin:0 0 10px; }
   body.lang-en .close-cta h3{ font-family:'Playfair Display',serif; }
   .close-cta p{ margin:0; font-size:13.8px; color:#c3d2ee; line-height:1.85; }
+  .field-tags{ display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; }
+  .field-tags span{
+    font-size:11.5px; font-weight:600; color:#eef3fc;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.16);
+    padding:6px 12px; border-radius:999px;
+  }
   .close-cta .go-wrap{ margin-top:20px; }
   .close-cta .go{
     display:inline-block;
@@ -309,7 +342,12 @@
     padding:11px 22px; border-radius:999px;
     opacity:.85;
     position:relative;
+    text-decoration:none;
+    cursor:pointer;
+    transition:transform .15s ease, opacity .2s ease;
   }
+  .close-cta .go:hover{ opacity:1; transform:translateY(-1px); }
+  .close-cta .go:active{ transform:scale(.96); }
   .close-cta .go::before{
     content:'';
     display:inline-block;
@@ -327,6 +365,37 @@
     line-height:1.7;
     max-width:34ch;
   }
+
+  /* ===== Channels slide ===== */
+  .chan-grid{
+    margin-top:36px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+    max-width:80ch;
+  }
+  @media (max-width:760px){ .chan-grid{ grid-template-columns:1fr; } }
+  .chan-card{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px 22px;
+    background:var(--panel);
+    display:flex; gap:16px; align-items:flex-start;
+    transition:transform .3s cubic-bezier(.22,.9,.32,1), box-shadow .3s ease, border-color .3s ease;
+  }
+  .chan-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 14px 30px -14px rgba(11,31,66,.28);
+    border-color:var(--sun-2);
+  }
+  .chan-emoji{
+    flex:none; font-size:24px; line-height:1;
+    width:44px; height:44px; border-radius:11px;
+    background:#fff; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chan-txt h4{ font-size:15.5px; font-weight:700; color:var(--navy); margin:0 0 5px; }
+  .chan-txt p{ margin:0; font-size:13px; color:var(--ink-soft); line-height:1.75; }
 
   /* ===== Nav ===== */
   .navctl{
@@ -360,6 +429,10 @@
     .hero-facts{ flex-direction:column; }
     .hero-facts div{ border-inline-end:none; border-bottom:1px solid var(--line); padding:12px 0; }
     .brand-txt small{ display:none; }
+    .brand-txt{ max-width:38vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .topbar-controls{ gap:6px; }
+    .theme-btn{ width:30px; height:30px; }
+    .lang-btn{ padding:5px 10px; font-size:11.5px; }
   }
 </style>
 </head>
@@ -387,9 +460,15 @@
       <small data-ar="مبادرة طلابية تحت الإشراف الرسمي" data-en="A student initiative under official supervision">مبادرة طلابية تحت الإشراف الرسمي</small>
     </div>
   </div>
-  <div class="lang-switch">
-    <button class="lang-btn active" id="btnAr" onclick="setLang('ar')">AR</button>
-    <button class="lang-btn" id="btnEn" onclick="setLang('en')">EN</button>
+  <div class="topbar-controls">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg id="themeIconSun" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><line x1="10" y1="1" x2="10" y2="3.2"/><line x1="10" y1="16.8" x2="10" y2="19"/><line x1="1" y1="10" x2="3.2" y2="10"/><line x1="16.8" y1="10" x2="19" y2="10"/><line x1="3.9" y1="3.9" x2="5.4" y2="5.4"/><line x1="14.6" y1="14.6" x2="16.1" y2="16.1"/><line x1="16.1" y1="3.9" x2="14.6" y2="5.4"/><line x1="5.4" y1="14.6" x2="3.9" y2="16.1"/></g></svg>
+      <svg id="themeIconMoon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none"><path d="M17 11.2A7.2 7.2 0 0 1 8.8 3a7.2 7.2 0 1 0 8.2 8.2Z" fill="currentColor"/></svg>
+    </button>
+    <div class="lang-switch">
+      <button class="lang-btn active" id="btnAr" onclick="setLang('ar')">AR</button>
+      <button class="lang-btn" id="btnEn" onclick="setLang('en')">EN</button>
+    </div>
   </div>
 </div>
 
@@ -507,6 +586,7 @@
           <li><b data-ar="كشف رسمي" data-en="An official list">كشف رسمي</b> <span data-ar="بأسماء كل الطلبة المشاركين في المبادرة." data-en="of the names of all students taking part in the initiative.">بأسماء كل الطلبة المشاركين في المبادرة.</span></li>
           <li><b data-ar="أرقام تواصل" data-en="Contact numbers">أرقام تواصل</b> <span data-ar="تُجمع بشكل منظم لتسهيل المراسلات الرسمية، وتُحفظ بشكل مقصور على أغراض المبادرة فقط." data-en="collected in an organized way to support official communication, and kept for the initiative's purposes only.">تُجمع بشكل منظم لتسهيل المراسلات الرسمية، وتُحفظ بشكل مقصور على أغراض المبادرة فقط.</span></li>
         </ul>
+        <p class="step-note" data-ar="بيانات الحصر دي هي نفسها هتتجمع من خلال فورم التسجيل في آخر السلايدز." data-en="This same information is collected through the registration form at the end of the slides.">بيانات الحصر دي هي نفسها هتتجمع من خلال فورم التسجيل في آخر السلايدز.</p>
       </div>
     </div>
   </section>
@@ -524,6 +604,58 @@
     </div>
   </section>
 
+
+  <!-- Slide 10 — Community channels -->
+  <section class="slide" id="slide-10">
+    <div class="idx"><span class="ln"></span><span data-ar="داخل المجتمع" data-en="Inside the community">داخل المجتمع</span></div>
+    <h2 class="headline" data-ar="قنوات المجتمع" data-en="Community Channels">قنوات المجتمع</h2>
+    <p class="lede" data-ar="كل قناة ليها غرض واضح، عشان كل حاجة تلاقيها في مكانها بسهولة." data-en="Each channel has a clear purpose, so everything is easy to find in its place.">كل قناة ليها غرض واضح، عشان كل حاجة تلاقيها في مكانها بسهولة.</p>
+    <div class="chan-grid">
+      <div class="chan-card">
+        <div class="chan-emoji">📢</div>
+        <div class="chan-txt">
+          <h4 data-ar="الإعلانات" data-en="Announcements">الإعلانات</h4>
+          <p data-ar="إعلانات رسمية، تحديثات مهمة وتنبيهات عاجلة." data-en="Official announcements, important updates & urgent notices.">إعلانات رسمية، تحديثات مهمة وتنبيهات عاجلة.</p>
+        </div>
+      </div>
+      <div class="chan-card">
+        <div class="chan-emoji">💡</div>
+        <div class="chan-txt">
+          <h4 data-ar="اسأل واستفسر" data-en="Ask & Help">اسأل واستفسر</h4>
+          <p data-ar="اسأل أي سؤال، واستفيد بإجابات زمايلك." data-en="Ask questions, get answers & help each other.">اسأل أي سؤال، واستفيد بإجابات زمايلك.</p>
+        </div>
+      </div>
+      <div class="chan-card">
+        <div class="chan-emoji">💬</div>
+        <div class="chan-txt">
+          <h4 data-ar="نقاش عام" data-en="Discussion">نقاش عام</h4>
+          <p data-ar="نقاشات عامة، كلام حر، ودردشة بين الطلبة." data-en="General discussions, conversations & student chat.">نقاشات عامة، كلام حر، ودردشة بين الطلبة.</p>
+        </div>
+      </div>
+      <div class="chan-card">
+        <div class="chan-emoji">📚</div>
+        <div class="chan-txt">
+          <h4 data-ar="مذاكرة ومصادر" data-en="Study & Resources">مذاكرة ومصادر</h4>
+          <p data-ar="محاضرات، ملفات PDF، بوردات، ملازم ومصادر مذاكرة مفيدة." data-en="Lectures, PDFs, boards, notes & useful study materials.">محاضرات، ملفات PDF، بوردات، ملازم ومصادر مذاكرة مفيدة.</p>
+        </div>
+      </div>
+      <div class="chan-card">
+        <div class="chan-emoji">🎉</div>
+        <div class="chan-txt">
+          <h4 data-ar="فعاليات وأنشطة" data-en="Events & Activities">فعاليات وأنشطة</h4>
+          <p data-ar="فعاليات، أنشطة، مسابقات وفرص للطلبة." data-en="Events, activities, competitions & student opportunities.">فعاليات، أنشطة، مسابقات وفرص للطلبة.</p>
+        </div>
+      </div>
+      <div class="chan-card">
+        <div class="chan-emoji">🎓</div>
+        <div class="chan-txt">
+          <h4 data-ar="معلومات جامعية" data-en="University Info">معلومات جامعية</h4>
+          <p data-ar="جداول، معلومات أكاديمية، مواعيد نهائية وتحديثات الجامعة." data-en="Schedules, academic information, deadlines & university updates.">جداول، معلومات أكاديمية، مواعيد نهائية وتحديثات الجامعة.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Slide 6 — Responsible students -->
   <section class="slide" id="slide-6">
     <div class="idx"><span class="ln"></span><span data-ar="فريق التنسيق" data-en="Coordination Team">فريق التنسيق</span></div>
@@ -537,7 +669,7 @@
       </div>
       <div class="team-card">
         <div class="team-avatar">ج</div>
-        <div class="team-name">جاسر</div>
+        <div class="team-name">جاسر السيسى</div>
         <div class="team-role" data-ar="طالب مسؤول" data-en="Responsible Student">طالب مسؤول</div>
       </div>
       <div class="team-card">
@@ -548,8 +680,8 @@
     </div>
   </section>
 
-  <!-- Slide 7 — Closing -->
-  <section class="slide" id="slide-7">
+  <!-- Slide 9 — Closing -->
+  <section class="slide" id="slide-9">
     <div class="idx"><span class="ln"></span><span data-ar="الخلاصة" data-en="In Summary">الخلاصة</span></div>
     <h2 class="headline" data-ar="ثقة حقيقية، من الجامعة وللطلبة" data-en="Real trust — from the university, for the students">ثقة حقيقية، من الجامعة وللطلبة</h2>
     <div class="close-wrap">
@@ -560,16 +692,23 @@
       </div>
       <div class="close-cta">
         <div>
-          <h3 data-ar="جاهزين نبدأ الخطوة الأولى" data-en="Ready for step one">جاهزين نبدأ الخطوة الأولى</h3>
-          <p data-ar="حصر الطلبة، تقسيم الـ Sections، واختيار الممثلين — بإشراف الجهات الثلاث من أول يوم." data-en="Register students, form the Sections, elect representatives — under the three bodies' supervision from day one.">حصر الطلبة، تقسيم الـ Sections، واختيار الممثلين — بإشراف الجهات الثلاث من أول يوم.</p>
+          <h3 data-ar="جاهزين نبدأ — فورم التسجيل" data-en="Ready to begin — the registration form">جاهزين نبدأ — فورم التسجيل</h3>
+          <p data-ar="زرار «لنبدأ» هو نفسه فورم التسجيل، وهيطلب 4 بيانات بس:" data-en="The “Let's begin” button is the registration form itself, and it will only ask for 4 details:">زرار «لنبدأ» هو نفسه فورم التسجيل، وهيطلب 4 بيانات بس:</p>
+          <div class="field-tags">
+            <span data-ar="الاسم بالكامل" data-en="Full name">الاسم بالكامل</span>
+            <span data-ar="الرقم الجامعي (Student ID)" data-en="Student ID">الرقم الجامعي (Student ID)</span>
+            <span data-ar="البريد الإلكتروني" data-en="Email">البريد الإلكتروني</span>
+            <span data-ar="رقم الموبايل" data-en="Phone number">رقم الموبايل</span>
+          </div>
         </div>
         <div class="go-wrap">
-          <div class="go" data-ar="لسه مش شغالة" data-en="Not active yet">لنبدأ →</div>
-          <p class="go-note" data-ar="التسجيل هيبدأ لما ال Student ID يتسلم." data-en="Registration will start once the Student ID is submitted.">التسجيل هيبدأ لما ال Student ID يتسلم.</p>
+          <a class="go" id="registerFormLink" href="https://forms.gle/8RRRwkahhB61ZE8VA" target="_blank" rel="noopener" data-ar="لنبدأ →" data-en="Let's begin →">لنبدأ →</a>
+          <p class="go-note" data-ar="هيوديك على فورم التسجيل الرسمي على Google Forms." data-en="Takes you to the official registration form on Google Forms.">هيوديك على فورم التسجيل الرسمي على Google Forms.</p>
         </div>
       </div>
     </div>
   </section>
+
 
 </div>
 </div>
@@ -638,6 +777,14 @@
     }
     touchX = null;
   }, {passive:true});
+
+  window.toggleTheme = function(){
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    var next = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    document.getElementById('themeIconSun').style.display = next === 'dark' ? 'none' : 'block';
+    document.getElementById('themeIconMoon').style.display = next === 'dark' ? 'block' : 'none';
+  };
 
   window.setLang = function(l){
     lang = l;
