@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Ain Shams National University Student Community | مجتمع طلاب جامعة عين شمس الأهلية</title>
+<title>Ain Shams Student Community | مجتمع طلاب عين شمس</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -170,17 +170,6 @@
     .hero-emblem .ring{ animation:none; }
   }
   .hero-text{ flex:1 1 420px; }
-  .audience-badge{
-    display:inline-flex; align-items:center; gap:8px;
-    font-size:12px; font-weight:700; color:var(--sun);
-    background:rgba(200,137,15,.08);
-    border:1px solid rgba(200,137,15,.3);
-    padding:7px 14px; border-radius:999px;
-    margin-bottom:18px;
-  }
-  .audience-badge::before{
-    content:''; width:6px; height:6px; border-radius:50%; background:var(--sun-2); flex:none;
-  }
   .hero-title{
     font-family:'Amiri',serif;
     font-size:clamp(30px,5.2vw,54px);
@@ -377,6 +366,37 @@
     max-width:34ch;
   }
 
+  /* ===== Channels slide ===== */
+  .chan-grid{
+    margin-top:36px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+    max-width:80ch;
+  }
+  @media (max-width:760px){ .chan-grid{ grid-template-columns:1fr; } }
+  .chan-card{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px 22px;
+    background:var(--panel);
+    display:flex; gap:16px; align-items:flex-start;
+    transition:transform .3s cubic-bezier(.22,.9,.32,1), box-shadow .3s ease, border-color .3s ease;
+  }
+  .chan-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 14px 30px -14px rgba(11,31,66,.28);
+    border-color:var(--sun-2);
+  }
+  .chan-emoji{
+    flex:none; font-size:24px; line-height:1;
+    width:44px; height:44px; border-radius:11px;
+    background:#fff; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chan-txt h4{ font-size:15.5px; font-weight:700; color:var(--navy); margin:0 0 5px; }
+  .chan-txt p{ margin:0; font-size:13px; color:var(--ink-soft); line-height:1.75; }
+
   /* ===== Nav ===== */
   .navctl{
     position:fixed; bottom:calc(22px + env(safe-area-inset-bottom,0px));
@@ -436,7 +456,7 @@
       </g>
     </svg>
     <div class="brand-txt">
-      <span data-ar="مجتمع طلاب عين شمس الأهلية" data-en="Ain Shams National University Community">مجتمع طلاب عين شمس الأهلية</span>
+      <span data-ar="مجتمع طلاب عين شمس" data-en="Ain Shams Student Community">مجتمع طلاب عين شمس</span>
       <small data-ar="مبادرة طلابية تحت الإشراف الرسمي" data-en="A student initiative under official supervision">مبادرة طلابية تحت الإشراف الرسمي</small>
     </div>
   </div>
@@ -474,15 +494,13 @@
         <circle cx="60" cy="60" r="8" fill="var(--navy)"/>
       </svg>
       <div class="hero-text">
-        <div class="audience-badge" data-ar="خاص بطلاب الفرشمان (إعدادي هندسة)" data-en="For Freshman students (Engineering Prep Year)">خاص بطلاب الفرشمان (إعدادي هندسة)</div>
         <div class="hero-title" data-ar="مرجع الطلبة الرسمي الوحيد، بإشراف الجامعة" data-en="The one official student reference, under university supervision">مرجع الطلبة <em>الرسمي</em> الوحيد، بإشراف الجامعة</div>
-        <p class="hero-sub" data-ar="مبادرة لتأسيس Community طلابية واحدة معتمدة من جامعة عين شمس الأهلية، تكون القناة الموثوقة بين الطلبة والإدارة — بدل عشرات المجموعات المشتتة وغير الخاضعة لإشراف." data-en="An initiative to establish one student community, officially approved by Ain Shams National University, serving as the trusted channel between students and the administration — replacing dozens of scattered, unsupervised groups.">مبادرة لتأسيس Community طلابية واحدة معتمدة من جامعة عين شمس الأهلية، تكون القناة الموثوقة بين الطلبة والإدارة — بدل عشرات المجموعات المشتتة وغير الخاضعة لإشراف.</p>
+        <p class="hero-sub" data-ar="مبادرة لتأسيس Community طلابية واحدة معتمدة من جامعة عين شمس، تكون القناة الموثوقة بين الطلبة والإدارة — بدل عشرات المجموعات المشتتة وغير الخاضعة لإشراف." data-en="An initiative to establish one student community, officially approved by Ain Shams University, serving as the trusted channel between students and the administration — replacing dozens of scattered, unsupervised groups.">مبادرة لتأسيس Community طلابية واحدة معتمدة من جامعة عين شمس، تكون القناة الموثوقة بين الطلبة والإدارة — بدل عشرات المجموعات المشتتة وغير الخاضعة لإشراف.</p>
       </div>
     </div>
     <div class="hero-facts">
-      <div><strong data-ar="الفرقة المستهدفة" data-en="Target year">الفرقة المستهدفة</strong><span data-ar="فرشمان — إعدادي هندسة" data-en="Freshman — Engineering Prep Year">فرشمان — إعدادي هندسة</span></div>
-      <div><strong data-ar="سنة الالتحاق" data-en="Enrollment year">سنة الالتحاق</strong><span data-ar="٢٠٢٦ – ٢٠٢٧" data-en="2026 – 2027">٢٠٢٦ – ٢٠٢٧</span></div>
-      <div><strong data-ar="سنة التخرج المتوقعة" data-en="Expected graduation">سنة التخرج المتوقعة</strong><span data-ar="٢٠٢٩ – ٢٠٣٠ (٤ سنين هندسة)" data-en="2029 – 2030 (4-year program)">٢٠٢٩ – ٢٠٣٠ (٤ سنين هندسة)</span></div>
+      <div><strong data-ar="الهدف" data-en="Goal">الهدف</strong><span data-ar="Community واحدة معتمدة رسميًا" data-en="One officially approved community">Community واحدة معتمدة رسميًا</span></div>
+      <div><strong data-ar="الإشراف" data-en="Oversight">الإشراف</strong><span data-ar="الجامعة، الأمن، شؤون الطلبة" data-en="University, security, student affairs">د/ مومن  د/نبيل</span></div>
     </div>
   </section>
 
@@ -538,6 +556,8 @@
       <div class="mrow">
         <div class="mrole" data-ar="المشرف الأكاديمي" data-en="Academic Supervisor">المشرف الأكاديمي</div>
         <div class="mname" data-ar="د. نبيل" data-en="Dr. Nabil">د. نبيل</div>
+        <div class="mname" data-ar="د. نبيل" data-en="Dr. Nabil">د. مومن</div>
+
         <p data-ar="إشراف مباشر ومستمر على فكرة الـ community وكل نشاط بيحصل جواها من أول يوم." data-en="Direct, ongoing supervision of the community concept and every activity within it from day one.">إشراف مباشر ومستمر على فكرة الـ community وكل نشاط بيحصل جواها من أول يوم.</p>
       </div>
     </div>
@@ -575,6 +595,8 @@
     </div>
   </section>
 
+
+  
   <!-- Slide 6 — Responsible students -->
   <section class="slide" id="slide-6">
     <div class="idx"><span class="ln"></span><span data-ar="فريق التنسيق" data-en="Coordination Team">فريق التنسيق</span></div>
